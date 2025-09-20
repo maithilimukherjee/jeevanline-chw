@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHW Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Soft background color */
+        }
+        .container {
+            max-width: 600px;
+        }
+        /* Custom styles for gamification badges, etc. */
+        .badge {
+            font-size: 1rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="bg-[#f5f7fa] text-gray-800">
+
+    <!-- Main Container -->
+    <div class="container mx-auto p-4 md:p-6 lg:p-8">
+
+        <!-- Header -->
+        <header class="flex items-center justify-between pb-6">
+            <h1 class="text-2xl font-bold text-gray-900">CHW Dashboard</h1>
+            <div class="flex items-center space-x-2">
+                <!-- Language Toggle -->
+                <button id="lang-toggle" class="bg-white rounded-full p-2 shadow-sm text-sm font-medium">EN</button>
+                <!-- Profile Icon -->
+                <button class="bg-white rounded-full p-2 shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-gray-600">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 19.5a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Offline Status & SMS Fallback -->
+        <div id="offline-bar" class="hidden flex items-center justify-between p-3 bg-red-100 border border-red-200 text-red-700 rounded-lg mb-6">
+            <div class="flex items-center space-x-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 16.5L12 12.75 8.25 16.5m11.25-10.5L12 11.25 4.5 3.75" />
+                </svg>
+                <span class="text-sm font-semibold">Offline Mode</span>
+            </div>
+            <button id="sms-fallback" class="text-sm font-semibold py-1 px-3 bg-red-500 text-white rounded-full shadow-md hover:bg-red-600">
+                Send via SMS
+            </button>
+        </div>
+
+        <!-- Quick Actions -->
+        <section class="mb-8">
+            <h2 class="text-xl font-bold text-gray-700 mb-4">Quick Actions</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <button class="flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-blue-500 mb-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.007 5.25H3.75v.008h.007v-.008zm-.007 5.25H3.75v.008h.007v-.008z" />
+                    </svg>
+                    <span class="text-sm font-medium text-center">Register New Patient</span>
+                </button>
+                <button class="flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-green-500 mb-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3M18.75 12a6 6 0 01-6 6v-1.5m6-7.5a6 6 0 00-6-6v-1.5m0-6V3m0 0a2.25 2.25 0 00-2.25-2.25M12 6a2.25 2.25 0 00-2.25 2.25m4.5 0a2.25 2.25 0 012.25-2.25" />
+                    </svg>
+                    <span class="text-sm font-medium text-center">Tasks from Doctor</span>
+                </button>
+                <button class="flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-orange-500 mb-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m0-10.5a8.25 8.25 0 11-8.25 8.25A8.25 8.25 0 0112 1.5zM12 12m-3.75 0v3.75" />
+                    </svg>
+                    <span class="text-sm font-medium text-center">Meds Delivered</span>
+                </button>
+                <button class="flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-rose-500 mb-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303-3.375c.86-1.54 2.684-2.83 4.88-2.946M12 15a3 3 0 100-6 3 3 0 000 6zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span class="text-sm font-medium text-center">Alert Doctor</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Patient Queue -->
+        <section class="mb-8">
+            <h2 class="text-xl font-bold text-gray-700 mb-4">Patient Queue</h2>
+            <div class="space-y-4">
+                <!-- Urgent Priority -->
+                <div class="flex items-center space-x-4 p-4 bg-red-50 rounded-lg border-l-4 border-red-500 shadow-sm">
+                    <div class="flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-red-500">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m0-10.5a8.25 8.25 0 11-8.25 8.25A8.25 8.25 0 0112 1.5zM12 12m-3.75 0v3.75" />
+                        </svg>
+                    </div>
+                    <div class="flex-grow">
+                        <p class="font-medium">Rocky Singh</p>
+                        <p class="text-sm text-red-500">Urgent: Severe headache, burning eyes, high fever</p>
+                    </div>
+                    <button class="bg-red-500 text-white rounded-full px-3 py-1 text-sm font-semibold">View</button>
+                </div>
+                <!-- Follow-up Priority -->
+                <div class="flex items-center space-x-4 p-4 bg-yellow-50 rounded-lg border-l-4 border-yellow-500 shadow-sm">
+                    <div class="flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-yellow-500">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m0-10.5a8.25 8.25 0 11-8.25 8.25A8.25 8.25 0 0112 1.5zM12 12m-3.75 0v3.75" />
+                        </svg>
+                    </div>
+                    <div class="flex-grow">
+                        <p class="font-medium">Emma Smith</p>
+                        <p class="text-sm text-yellow-500">Follow-up: Medication refill</p>
+                    </div>
+                    <button class="bg-yellow-500 text-white rounded-full px-3 py-1 text-sm font-semibold">View</button>
+                </div>
+                <!-- Routine Priority -->
+                <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg border-l-4 border-gray-500 shadow-sm">
+                    <div class="flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-500">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m0-10.5a8.25 8.25 0 11-8.25 8.25A8.25 8.25 0 0112 1.5zM12 12m-3.75 0v3.75" />
+                        </svg>
+                    </div>
+                    <div class="flex-grow">
+                        <p class="font-medium">Alice Johnson</p>
+                        <p class="text-sm text-gray-500">Routine: Hypertension check</p>
+                    </div>
+                    <button class="bg-gray-500 text-white rounded-full px-3 py-1 text-sm font-semibold">View</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Health Journal Feed -->
+        <section class="mb-8">
+            <h2 class="text-xl font-bold text-gray-700 mb-4">Journal Updates</h2>
+            <div class="space-y-4">
+                <!-- Journal entry card -->
+                <div class="p-4 bg-white rounded-lg shadow-sm">
+                    <div class="flex items-center mb-2">
+                        <div class="w-8 h-8 flex items-center justify-center bg-blue-100 rounded-full mr-3">
+                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-blue-500">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.671.658a.75.75 0 01-.932-.932l.658-2.671a4.5 4.5 0 011.13-1.897L16.862 4.487z" />
+                            </svg>
+                        </div>
+                        <span class="font-semibold">Babu Kaka</span>
+                    </div>
+                    <p class="text-sm text-gray-600">"Feeling dizzy and light-headed since this morning."</p>
+                    <div class="flex justify-end space-x-2 mt-4">
+                        <button class="text-xs font-medium text-white bg-rose-500 rounded-full py-1 px-3 shadow-sm hover:bg-rose-600 transition-colors duration-200 flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 19.5a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                            </svg>
+                            <span>Report to Doc</span>
+                        </button>
+                        <button class="text-xs font-medium text-white bg-blue-500 rounded-full py-1 px-3 shadow-sm hover:bg-blue-600 transition-colors duration-200 flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.395L15.397 8.769A3.75 3.75 0 0012 7.5h-1.5M4.5 12h1.5A3.75 3.75 0 009 15.75L15.397 16.231M15.75 9.395L16.231 15.397" />
+                            </svg>
+                            <span>Reanalyse Report</span>
+                        </button>
+                        <button class="text-xs font-medium text-white bg-green-500 rounded-full py-1 px-3 shadow-sm hover:bg-green-600 transition-colors duration-200 flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span>Patient Recovered</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- Journal entry card -->
+                <div class="p-4 bg-white rounded-lg shadow-sm">
+                    <div class="flex items-center mb-2">
+                        <div class="w-8 h-8 flex items-center justify-center bg-green-100 rounded-full mr-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-green-500">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m0-10.5a8.25 8.25 0 11-8.25 8.25A8.25 8.25 0 0112 1.5zM12 12m-3.75 0v3.75" />
+                            </svg>
+                        </div>
+                        <span class="font-semibold">Maria Garcia</span>
+                    </div>
+                    <p class="text-sm text-gray-600">"My knee pain is much better after the exercises you showed me."</p>
+                    <div class="flex justify-end space-x-2 mt-4">
+                        <button class="text-xs font-medium text-white bg-rose-500 rounded-full py-1 px-3 shadow-sm hover:bg-rose-600 transition-colors duration-200 flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 19.5a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                            </svg>
+                            <span>Report to Doc</span>
+                        </button>
+                        <button class="text-xs font-medium text-white bg-blue-500 rounded-full py-1 px-3 shadow-sm hover:bg-blue-600 transition-colors duration-200 flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.395L15.397 8.769A3.75 3.75 0 0012 7.5h-1.5M4.5 12h1.5A3.75 3.75 0 009 15.75L15.397 16.231M15.75 9.395L16.231 15.397" />
+                            </svg>
+                            <span>Reanalyse Report</span>
+                        </button>
+                        <button class="text-xs font-medium text-white bg-green-500 rounded-full py-1 px-3 shadow-sm hover:bg-green-600 transition-colors duration-200 flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span>Patient Recovered</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Healthcare Kit Delivery Tracker -->
+        <section>
+            <h2 class="text-xl font-bold text-gray-700 mb-4">Healthcare Kit Delivery Tracker</h2>
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <div class="flex items-center justify-between mb-4">
+                    <p class="font-semibold text-gray-700">Deliveries Completed</p>
+                    <p class="font-bold text-lg text-blue-600">33%</p>
+                </div>
+                <div class="w-full bg-blue-100 rounded-full h-2.5 mb-4">
+                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 33%;"></div>
+                </div>
+                <div class="space-y-4">
+                    <!-- Delivery Item - Not Completed -->
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg shadow-sm">
+                        <div class="flex-grow">
+                            <p class="font-semibold">House of K.L. Sharma</p>
+                            <p class="text-sm text-gray-500">Address: 123 Sector 17, Chandigarh</p>
+                        </div>
+                        <button class="bg-blue-500 text-white rounded-full px-3 py-1 text-sm font-semibold hover:bg-blue-600 transition-colors duration-200">Delivered</button>
+                    </div>
+                    <!-- Delivery Item - Not Completed -->
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg shadow-sm">
+                        <div class="flex-grow">
+                            <p class="font-semibold">House of S.K. Singh</p>
+                            <p class="text-sm text-gray-500">Address: 456 Sector 22, Chandigarh</p>
+                        </div>
+                        <button class="bg-blue-500 text-white rounded-full px-3 py-1 text-sm font-semibold hover:bg-blue-600 transition-colors duration-200">Delivered</button>
+                    </div>
+                    <!-- Delivery Item - Completed -->
+                    <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg border-l-4 border-green-500 shadow-sm">
+                        <div class="flex-grow">
+                            <p class="font-semibold line-through text-gray-500">House of A.K. Verma</p>
+                            <p class="text-sm text-green-500">Delivered: 789 Sector 15, Chandigarh</p>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-green-500">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- JavaScript for basic functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const langToggle = document.getElementById('lang-toggle');
+            const offlineBar = document.getElementById('offline-bar');
+            const smsFallback = document.getElementById('sms-fallback');
+            let isOffline = false;
+
+            // Language Toggle
+            langToggle.addEventListener('click', () => {
+                if (langToggle.textContent === 'EN') {
+                    langToggle.textContent = 'ES';
+                    // In a real app, you would swap all text content for Spanish here.
+                } else if (langToggle.textContent === 'ES') {
+                    langToggle.textContent = 'PA';
+                    // In a real app, you would swap all text content for Punjabi here.
+                } else {
+                    langToggle.textContent = 'EN';
+                    // Revert to English text.
+                }
+            });
+
+            // Simulate offline mode for demonstration
+            window.addEventListener('offline', () => {
+                isOffline = true;
+                offlineBar.classList.remove('hidden');
+                console.log('App is now offline.');
+            });
+
+            window.addEventListener('online', () => {
+                isOffline = false;
+                offlineBar.classList.add('hidden');
+                console.log('App is now online.');
+            });
+
+            // SMS fallback button logic
+            smsFallback.addEventListener('click', () => {
+                const phoneNumber = '1234567890'; // Replace with the actual recipient's number
+                const message = 'Hello, this is a message from the CHW app.';
+                const smsLink = `sms:${phoneNumber}?body=${encodeURIComponent(message)}`;
+
+                // Attempt to open the SMS app
+                window.location.href = smsLink;
+
+                // You could also add a message box here for confirmation
+                console.log('SMS fallback triggered.');
+            });
+        });
+    </script>
+
+</body>
+</html>
